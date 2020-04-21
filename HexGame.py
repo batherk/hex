@@ -102,4 +102,5 @@ class HexGame(AbstractGame):
         for pos in self.board.get_filled_positions():
             self.add_pos_to_visited_list(pos, self.board.get_value(pos))
 
+
         

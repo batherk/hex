@@ -3,6 +3,7 @@ from AbstractGame import AbstractGame
 from ActorNet import AbstractActorNeuralNet, LoadedNet, Dense
 from ReplayBuffer import ReplayBuffer
 from Settings import EPSILON
+import random
 
 class AbstractPlayer(ABC):
 
@@ -19,6 +20,15 @@ class AbstractPlayer(ABC):
     @abstractmethod
     def perform_action(self, game:AbstractGame):
         pass
+
+class RandomPlayer(AbstractPlayer):
+
+    def __init__(self, name="Random"):
+        super(RandomPlayer,self).__init__(name)
+    
+    def perform_action(self, game:AbstractGame):
+        action = random.choice(game.get_possible_actions())
+        game.perform_action(action)
 
 class NetBotFromTraining(AbstractPlayer):
 

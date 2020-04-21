@@ -7,7 +7,7 @@ from ProgressBar import ProgressBar
 from NetTrainer import NetTrainer
 from ReplayBuffer import ReplayBuffer
 from ActorNet import Dense, LoadedNet
-from Player import Human, NetBotFromLoading, NetBotFromTraining
+from Player import Human, NetBotFromLoading, NetBotFromTraining, RandomPlayer
 from MCT import MonteCarloTree
 from Settings import *
 from Match import Match
@@ -43,6 +43,14 @@ elif RUNS[RUN] == "Match after training nets":
     chal_net = Dense()
     player1 = NetBotFromTraining("Experienced",exp_net)
     player2 = NetBotFromTraining("Challenger",chal_net)
+
+    match = Match(game, player1, player2)
+    match.play_games()
+elif RUNS[RUN] == "Match vs random":
+    print("Mode: Match. Loaded default against random player")
+    game = HexGame()
+    player1 = NetBotFromLoading(DEFAULT_NET)
+    player2 = RandomPlayer()
 
     match = Match(game, player1, player2)
     match.play_games()
@@ -83,18 +91,22 @@ elif RUNS[RUN] == "Tournament - different training amounts from loading ":
     print("Mode: Trained tournament. Already trained nets play against each other.")
     game = HexGame()
     
-    player1 = NetBotFromLoading("After_2")
-    player2 = NetBotFromLoading("After_8")
-    player3 = NetBotFromLoading("After_20")
-    player4 = NetBotFromLoading("After_40")
-    player5 = NetBotFromLoading("After_50")
-    player6 = NetBotFromLoading("Experienced")
+    player1 = NetBotFromLoading("Experienced")
+    player2 = NetBotFromLoading("Challenger")
+    player3 = NetBotFromLoading("After_40")
+    player4 = NetBotFromLoading("After_120")
+    player5 = NetBotFromLoading("After_200")
+    player6 = NetBotFromLoading("New")
+    player7 = RandomPlayer()
 
-    players = [player1, player2, player3, player4, player5, player6]
+    players = [player1, player2, player3, player4, player5, player6, player7]
 
     tournament = Tournament(game,players)
     wins = tournament.play_tournament()
+elif RUNS[RUN] == "Train net on buffer and save it": 
+    print("Mode: Train net on buffer and save it")
+    trainer = NetTrainer(train_net_on_init=True)
+    trainer.net.save("New")
 else: 
     print("Custom - nothing")
-    #trainer = NetTrainer(train_net_on_init=True)
-    #trainer.net.save("Challenger")
+    
