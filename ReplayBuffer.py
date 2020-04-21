@@ -30,6 +30,7 @@ class ReplayBuffer:
         file = open(self.filename, 'w')
         json.dump({"inputs":self.inputs, "targets":self.targets}, file)
         self.saved_index = len(self.inputs)
+        file.close()
     
     def clear(self):
         self.inputs = []

@@ -33,7 +33,7 @@ class Dense(AbstractActorNeuralNet):
         super(Dense,self).__init__(board_size)
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.layers.Dense((board_size**2)*2+1))
+        self.model.add(tf.keras.layers.Dense(board_size**2+1))
         for node_count, activation in hidden_layers:
             self.model.add(tf.keras.layers.Dense(node_count,activation=activation))
         self.model.add(tf.keras.layers.Dense(board_size**2, activation=softmax))
