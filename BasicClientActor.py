@@ -1,10 +1,14 @@
 import math
 from BasicClientActorAbs import BasicClientActorAbs
+from Player import NetBotFromLoading
+from HexGame import HexGame
 
 class BasicClientActor(BasicClientActorAbs):
 
     def __init__(self, IP_address=None, verbose=True):
         self.series_id = -1
+        self.player = NetBotFromLoading("After_3_340")
+        self.game = HexGame()
         BasicClientActorAbs.__init__(self, IP_address, verbose=verbose)
 
     def handle_get_action(self, state):
@@ -19,9 +23,8 @@ class BasicClientActor(BasicClientActorAbs):
         """
 
         # This is an example player who picks random moves. REMOVE THIS WHEN YOU ADD YOUR OWN CODE !!
-        next_move = tuple(self.pick_random_free_cell(
-            state, size=int(math.sqrt(len(state)-1))))
-        print(state)
+        self.game.set_state(state)
+        next_move = self.player.get_action(self.game)
         return next_move
 
     def handle_series_start(self, unique_id, series_id, player_map, num_games, game_params):

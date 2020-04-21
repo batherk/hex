@@ -17,18 +17,20 @@ class AbstractPlayer(ABC):
     def is_players_turn(self,game:AbstractGame):
         return game.current_player==self.id
 
-    @abstractmethod
     def perform_action(self, game:AbstractGame):
+        game.perform_action(self.get_action(game))
+
+    @abstractmethod
+    def get_action(self, game:AbstractGame):
         pass
 
 class RandomPlayer(AbstractPlayer):
 
     def __init__(self, name="Random"):
         super(RandomPlayer,self).__init__(name)
-    
-    def perform_action(self, game:AbstractGame):
-        action = random.choice(game.get_possible_actions())
-        game.perform_action(action)
+
+    def get_action(self, game:AbstractGame):
+        return random.choice(game.get_possible_actions())
 
 class NetBotFromTraining(AbstractPlayer):
 
@@ -44,11 +46,10 @@ class NetBotFromTraining(AbstractPlayer):
         if train_on_replay_buffer:
             self.net.update(replay_buffer.get_all_inputs(),replay_buffer.get_all_targets())
 
-    def perform_action(self, game:AbstractGame):
+    def get_action(self, game:AbstractGame):
         pre_screen_probs = self.net.get_propabilities(game.get_state())
         after_screen_probs = game.get_possible_and_normalized_possibilities(pre_screen_probs)
-        action = game.get_action(self.epsilon, after_screen_probs)
-        game.perform_action(action)
+        return game.get_action(self.epsilon, after_screen_probs)
 
 class NetBotFromLoading(AbstractPlayer):
 
@@ -59,18 +60,17 @@ class NetBotFromLoading(AbstractPlayer):
         self.epsilon = epsilon
         self.net = LoadedNet(filename)
 
-    def perform_action(self, game:AbstractGame):
+    def get_action(self, game:AbstractGame):
         pre_screen_probs = self.net.get_propabilities(game.get_state())
         after_screen_probs = game.get_possible_and_normalized_possibilities(pre_screen_probs)
-        action = game.get_action(self.epsilon, after_screen_probs)
-        game.perform_action(action)
+        return game.get_action(self.epsilon, after_screen_probs)
 
 class Human(AbstractPlayer):
 
     def __init__(self, name):
         super(Human,self).__init__(name)
         
-    def perform_action(self, game:AbstractGame):
+    def get_action(self, game:AbstractGame):
         while True:
             game.board.show_graph(debug=True)
             user_input = input("Write the spot you want to put your piece (Format y,x): ")
@@ -85,8 +85,6 @@ class Human(AbstractPlayer):
             if not action in game.get_possible_actions():
                 print("The action is not possible")
                 continue
-            game.perform_action(action)
-            game.board.show_graph()
-            break
+            return action
 
 

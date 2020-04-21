@@ -137,30 +137,11 @@ class HexGrid:
         return self.get_node(node1_pos).is_neighbor_to(self.get_node(node2_pos))
 
     def get_state(self):
-        output = []
-        for pos in self.nodes:
-            if self.nodes[pos].value == 0:
-                output += [0,0]
-            elif self.nodes[pos].value == 1:
-                output += [0,1]
-            elif self.nodes[pos].value == 2:
-                output += [1,0]
-            else:
-                output += [1,1]
-        return tuple(output)
-
-        return tuple([])
+        return tuple([self.nodes[pos].value for pos in self.nodes])
 
     def set_state(self, state):
-        for i,pos in enumerate(self.nodes):
-            if state[2*i:2*i + 2] == (0,0):
-                self.nodes[pos].value = 0
-            elif state[2*i:2*i + 2] == (0,1):
-                self.nodes[pos].value = 1
-            elif state[2*i:2*i + 2] == (1,0):
-                self.nodes[pos].value = 2
-            else:
-                raise ValueError("Wrong format")          
+        for i, pos in enumerate(self.nodes):
+            self.nodes[pos].value = state[i]
 
     def get_neighbor_pos_with_same_value(self, pos):
         node = self.get_node(pos)

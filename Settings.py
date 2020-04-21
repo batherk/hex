@@ -15,7 +15,7 @@ RUNS = {0:"Custom",
         9:"Tournament - different training amounts from loading ",
         10:"Train net on buffer and save it"}
 
-RUN = 1
+RUN = 10
 
 # Game
 BOARD_SIZE = 6
@@ -49,7 +49,7 @@ HIDDEN_LAYERS = [(100,sigmoid)]
 OPTIMIZER = Adam
 LEARNING_RATE = 0.01
 EPOCHS_INIT = 300
-LOAD_NET = True
+LOAD_NET = False
 TRAIN_NET_ON_INIT = False
 
 # Visualization

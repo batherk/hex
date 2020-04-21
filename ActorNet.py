@@ -19,13 +19,13 @@ class AbstractActorNeuralNet(ABC):
         return tuple(self.model.predict(np.array([np.array(state)]))[0])
 
     def save(self,filename):
-        self.model.save(f"Models/{self.board_size}x{self.board_size}/" + filename)
+        self.model.save(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
 
 
 class LoadedNet(AbstractActorNeuralNet):
     def __init__(self,filename,board_size=BOARD_SIZE):
         super(LoadedNet,self).__init__(board_size)
-        self.model = tf.keras.models.load_model(f"Models/{self.board_size}x{self.board_size}/" + filename)
+        self.model = tf.keras.models.load_model(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
 
 
 class Dense(AbstractActorNeuralNet):
@@ -33,7 +33,7 @@ class Dense(AbstractActorNeuralNet):
         super(Dense,self).__init__(board_size)
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.layers.Dense((board_size**2)*2+1))
+        self.model.add(tf.keras.layers.Dense(board_size**2+1))
         for node_count, activation in hidden_layers:
             self.model.add(tf.keras.layers.Dense(node_count,activation=activation))
         self.model.add(tf.keras.layers.Dense(board_size**2, activation=softmax))
