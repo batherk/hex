@@ -59,15 +59,14 @@ elif RUNS[RUN] == "Tournament - different net structures using replay buffer":
     game = HexGame()
     replay_buffer = ReplayBuffer()
     net1 = Dense(hidden_layers=[(100,relu)], optimizer=Adam)
-    net2 = Dense(hidden_layers=[(100,tanh)], optimizer=Adam)
-    net3 = Dense(hidden_layers=[(100,sigmoid)], optimizer=Adam)
-    net4 = Dense(hidden_layers=[(100,softmax)], optimizer=Adam)
-    net5 = Dense(hidden_layers=[(100,linear)], optimizer=Adam)
-    player1 = NetBotFromTraining("RELU", net1, replay_buffer)
-    player2 = NetBotFromTraining("Tanh", net2, replay_buffer)
-    player3 = NetBotFromTraining("Sigmoid", net3, replay_buffer)
-    player4 = NetBotFromTraining("SoftMax", net4, replay_buffer)
-    player5 = NetBotFromTraining("Linear", net5, replay_buffer)
+    net2 = Dense(hidden_layers=[(100,sigmoid)], optimizer=Adam)
+    net3 = Dense(hidden_layers=[(100,relu)], optimizer=SGD)
+    net4 = Dense(hidden_layers=[(100,sigmoid)], optimizer=SGD)
+    player1 = NetBotFromTraining("Adam relu", net1, replay_buffer)
+    player2 = NetBotFromTraining("Adam sig", net2, replay_buffer)
+    player3 = NetBotFromTraining("SGD relu", net3, replay_buffer)
+    player4 = NetBotFromTraining("SGD sig", net4, replay_buffer)
+    player5 = RandomPlayer()
 
     players = [player1, player2, player3, player4, player5]
 

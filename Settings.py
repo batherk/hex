@@ -15,7 +15,7 @@ RUNS = {0:"Custom",
         9:"Tournament - different training amounts from loading ",
         10:"Train net on buffer and save it"}
 
-RUN = 6
+RUN = 7
 
 # Game
 BOARD_SIZE = 6
