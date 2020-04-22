@@ -13,9 +13,10 @@ def binary_to_int(state):
             raise ValueError("Not possible state")
     return new_state
 
-rb = ReplayBuffer()
-rb_int = ReplayBuffer(filename="6x6/int.json")
+def create_int_from_binary(new_filename):
+    rb = ReplayBuffer()
+    rb_int = ReplayBuffer(filename=new_filename)
 
-for i, state in enumerate(rb.inputs):
-    rb_int.add_data(binary_to_int(state),rb.targets[i])
-rb_int.save_data()
+    for i, state in enumerate(rb.inputs):
+        rb_int.add_data(binary_to_int(state),rb.targets[i])
+    rb_int.save_data()

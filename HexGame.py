@@ -74,7 +74,7 @@ class HexGame(AbstractGame):
         pos = list(deepcopy(possibilities))
 
         for i in range(len(pos)):
-            if state[2*i:2*i+2] == (0,0):  
+            if state[i] == 0:  
                 total += pos[i]
             else: 
                 pos[i] = 0
