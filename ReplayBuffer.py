@@ -61,9 +61,7 @@ class ReplayBuffer:
         for inp in self.inputs:
             inputs.append(np.array(inp))
             if self.add_orientation:
-                inp_orientation = [inp[0]]
-                for i in range(len(inp)-2,0,-2):
-                    inp_orientation += [inp[i], inp[i+1]]
+                inp_orientation = [inp[0]] + inp[len(inp):0:-1]
                 inputs.append(np.array(inp_orientation))
         return np.array(inputs)
 
