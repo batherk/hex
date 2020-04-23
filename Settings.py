@@ -15,7 +15,7 @@ RUNS = {0:"Custom",
         9:"Tournament - different training amounts from loading ",
         10:"Train net on buffer and save it"}
 
-RUN = 7
+RUN = 9
 
 # Game
 BOARD_SIZE = 6
@@ -32,7 +32,7 @@ EPOCHS_WHILE_TRAINING = 200
 CACHED_NETS = 5
 
 # Playing
-PLAYING_ITERATIONS = 100
+PLAYING_ITERATIONS = 1000
 
 # Replay buffer
 BUFFER_FILENAME = f"{BOARD_SIZE}x{BOARD_SIZE}/experienced.json"
@@ -49,8 +49,8 @@ HIDDEN_LAYERS = [(100,sigmoid)]
 OPTIMIZER = Adam
 LEARNING_RATE = 0.01
 EPOCHS_INIT = 300
-LOAD_NET = True
-TRAIN_NET_ON_INIT = False
+LOAD_NET = False
+TRAIN_NET_ON_INIT = True
 
 # Visualization
 VERBOSE = False

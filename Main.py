@@ -58,14 +58,14 @@ elif RUNS[RUN] == "Tournament - different net structures using replay buffer":
     print("Mode: Tournament. Several players play against each other.")
     game = HexGame()
     replay_buffer = ReplayBuffer()
-    net1 = Dense(hidden_layers=[(100,relu)], optimizer=Adam)
-    net2 = Dense(hidden_layers=[(100,sigmoid)], optimizer=Adam)
-    net3 = Dense(hidden_layers=[(100,relu)], optimizer=SGD)
-    net4 = Dense(hidden_layers=[(100,sigmoid)], optimizer=SGD)
-    player1 = NetBotFromTraining("Adam relu", net1, replay_buffer)
-    player2 = NetBotFromTraining("Adam sig", net2, replay_buffer)
-    player3 = NetBotFromTraining("SGD relu", net3, replay_buffer)
-    player4 = NetBotFromTraining("SGD sig", net4, replay_buffer)
+    net1 = Dense(hidden_layers=[(100,sigmoid),(36,sigmoid)], optimizer=Adam)
+    net2 = Dense(hidden_layers=[(36,sigmoid),(36,sigmoid)], optimizer=Adam)
+    net3 = Dense(hidden_layers=[(100,sigmoid),(100,sigmoid)], optimizer=Adam)
+    net4 = Dense(hidden_layers=[(100,sigmoid)], optimizer=Adam)
+    player1 = NetBotFromTraining("100,36", net1, replay_buffer)
+    player2 = NetBotFromTraining("36,36", net2, replay_buffer)
+    player3 = NetBotFromTraining("100,100", net3, replay_buffer)
+    player4 = NetBotFromTraining("100", net4, replay_buffer)
     player5 = RandomPlayer()
 
     players = [player1, player2, player3, player4, player5]
@@ -90,15 +90,15 @@ elif RUNS[RUN] == "Tournament - different training amounts from loading ":
     print("Mode: Trained tournament. Already trained nets play against each other.")
     game = HexGame()
     
-    player1 = NetBotFromLoading("Experienced")
-    player2 = NetBotFromLoading("Challenger")
-    player3 = NetBotFromLoading("After_40")
-    player4 = NetBotFromLoading("After_120")
-    player5 = NetBotFromLoading("After_200")
-    player6 = NetBotFromLoading("New")
+    player1 = NetBotFromLoading("After_340")
+    player2 = NetBotFromLoading("After_400")
+    player3 = NetBotFromLoading("After_440")
+    player4 = NetBotFromLoading("New")
+    #player5 = NetBotFromLoading("After_200")
+    #player6 = NetBotFromLoading("New")
     player7 = RandomPlayer()
 
-    players = [player1, player2, player3, player4, player5, player6, player7]
+    players = [player1, player2, player3, player4, player7] #, player6, player7]
 
     tournament = Tournament(game,players)
     wins = tournament.play_tournament()

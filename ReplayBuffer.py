@@ -61,7 +61,7 @@ class ReplayBuffer:
         for inp in self.inputs:
             inputs.append(np.array(inp))
             if self.add_orientation:
-                inp_orientation = [inp[0]] + inp[len(inp):0:-1]
+                inp_orientation = [inp[0]] + list(inp)[len(inp):0:-1]
                 inputs.append(np.array(inp_orientation))
         return np.array(inputs)
 
@@ -70,7 +70,7 @@ class ReplayBuffer:
         for target in self.targets:
             targets.append(np.array(target))
             if self.add_orientation:
-                targets.append(np.array(target[::-1]))
+                targets.append(np.array(list(target)[::-1]))
         return np.array(targets)
 
     def add_data(self, input, target):

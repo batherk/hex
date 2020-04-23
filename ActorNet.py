@@ -19,13 +19,13 @@ class AbstractActorNeuralNet(ABC):
         return tuple(self.model.predict(np.array([np.array(state)]))[0])
 
     def save(self,filename):
-        self.model.save(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
+        self.model.save(f"Models/{self.board_size}x{self.board_size}/" + filename)
 
 
 class LoadedNet(AbstractActorNeuralNet):
     def __init__(self,filename,board_size=BOARD_SIZE):
         super(LoadedNet,self).__init__(board_size)
-        self.model = tf.keras.models.load_model(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
+        self.model = tf.keras.models.load_model(f"Models/{self.board_size}x{self.board_size}/" + filename)
 
 
 class Dense(AbstractActorNeuralNet):
