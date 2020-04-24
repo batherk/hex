@@ -16,7 +16,7 @@ class AbstractActorNeuralNet(ABC):
         return self.model.fit(states,target_possibilities, epochs=epochs)
 
     def get_propabilities(self, state):
-        return tuple(self.model.predict(np.array([np.array(state)]))[0])
+        return tuple(self.model(np.array([np.array(state)]))[0])
 
     def save(self,filename):
         self.model.save(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
