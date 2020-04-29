@@ -1,10 +1,10 @@
 import numpy as np
 import json
-from Settings import BUFFER_FILENAME, BUFFER_SIZE
+from Settings import BUFFER_FILENAME, BUFFER_SIZE, ADD_ORIENTATION
 
 class ReplayBuffer:
     
-    def __init__(self, max_size=BUFFER_SIZE, filename=BUFFER_FILENAME, add_orientation=True, clean=False):
+    def __init__(self, max_size=BUFFER_SIZE, filename=BUFFER_FILENAME, add_orientation=ADD_ORIENTATION, clean=False):
         self.filename = "Buffers/" + filename
         self.max_size = max_size
         self.inputs = []

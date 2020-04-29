@@ -1,11 +1,13 @@
-from Settings import PLAYING_ITERATIONS
-from Player import AbstractPlayer
+from Settings import PLAYING_ITERATIONS, ADD_RANDOM_TO_TOURNAMENT
+from Player import AbstractPlayer, RandomPlayer
 from Match import Match
 from HexGame import HexGame
 
 class Tournament:
-    def __init__(self, game, players, playing_iterations=PLAYING_ITERATIONS):
+    def __init__(self, game, players, playing_iterations=PLAYING_ITERATIONS, add_random=ADD_RANDOM_TO_TOURNAMENT):
         self.players = players
+        if add_random:
+            self.players.append(RandomPlayer())
         self.wins = [0]*len(players)
         self.playing_iterations = playing_iterations
         self.game = game

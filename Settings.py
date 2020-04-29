@@ -8,35 +8,37 @@ RUNS = {0:"Custom",
         2:"Playing model against itself", 
         3:"Testing MCTS- vs Net-probabilities", 
         4:"Match with loaded nets", 
-        5:"Match after training nets",
-        6:"Match vs random",
-        7:"Tournament - different net structures using replay buffer", 
-        8:"Tournament - different training amounts while training", 
-        9:"Tournament - different training amounts from loading ",
-        10:"Train net on buffer and save it"}
+        5:"Match vs random",
+        6:"Tournament - different net structures using replay buffer", 
+        7:"Tournament - different training amounts from loading ",
+        8:"Train net on buffer and save it"}
 
-RUN = 7
+RUN = 8
 
 # Game
 BOARD_SIZE = 6
 
 # Simulation
-ROLLOUT_ITERATIONS = 100
+ROLLOUT_ITERATIONS = 25
 STARTING_PLAYER_ACTUAL = 3
 
 # Training
 TRAINING_ITERATIONS = 100
 TRAIN_WITH_RANDOM_SAMPLES = False
 SAMPLES_WHILE_TRAINING = 100
-EPOCHS_WHILE_TRAINING = 200
+EPOCHS_WHILE_TRAINING = 100
+EPOCHS_INIT = 300
+LOAD_NET = False
+TRAIN_NET_ON_INIT = False
 CACHED_NETS = 5
 
 # Playing
-PLAYING_ITERATIONS = 100
+PLAYING_ITERATIONS = 10
 
 # Replay buffer
 BUFFER_FILENAME = f"{BOARD_SIZE}x{BOARD_SIZE}/experienced.json"
-BUFFER_SIZE = 3000
+BUFFER_SIZE = 100
+ADD_ORIENTATION = True
 
 # Tree
 EPSILON = 1
@@ -45,13 +47,17 @@ POSSIBILITY_FACTOR = 10
 
 # Net
 DEFAULT_NET = "After_3_340"
-HIDDEN_LAYERS = [(100,sigmoid)]
-OPTIMIZER = Adam
-LEARNING_RATE = 0.01
-EPOCHS_INIT = 300
-LOAD_NET = True
-TRAIN_NET_ON_INIT = False
+HIDDEN_LAYERS = [(1000,relu),(1000,relu),(1000,relu)]
+OPTIMIZER = SGD
+LEARNING_RATE = 0.001
 
 # Visualization
 VERBOSE = False
 PAUSE = 0.1
+
+# Match
+NETS_MATCH = ["After_3_340","New"]
+
+# Tournament
+NETS_TOURNAMENT = ["After_3_340","New"]
+ADD_RANDOM_TO_TOURNAMENT = True

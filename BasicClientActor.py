@@ -2,12 +2,13 @@ import math
 from BasicClientActorAbs import BasicClientActorAbs
 from Player import NetBotFromLoading
 from HexGame import HexGame
+from Settings import DEFAULT_NET
 
 class BasicClientActor(BasicClientActorAbs):
 
     def __init__(self, IP_address=None, verbose=True):
         self.series_id = -1
-        self.player = NetBotFromLoading("After_3_340")
+        self.player = NetBotFromLoading(DEFAULT_NET)
         self.game = HexGame()
         BasicClientActorAbs.__init__(self, IP_address, verbose=verbose)
 

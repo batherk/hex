@@ -21,7 +21,7 @@ elif RUNS[RUN] == "Training model":
     gt.train_games()
 elif RUNS[RUN] == "Playing model against itself": 
     print("Mode: Playing the model against itself.")
-    gt = NetTrainer()
+    gt = NetTrainer(load_net=True)
     gt.play_games()
 elif RUNS[RUN] == "Testing MCTS- vs Net-probabilities": 
     print("Mode: Testing probabilities when the model play against itself.")
@@ -30,20 +30,10 @@ elif RUNS[RUN] == "Testing MCTS- vs Net-probabilities":
 elif RUNS[RUN] == "Match with loaded nets": 
     print("Mode: Match. Two players play against each other after loading saved nets.")
     game = HexGame()
-    player1 = NetBotFromLoading("Experienced")
-    player2 = NetBotFromLoading("Challenger")
-
-    match = Match(game, player1, player2)
-    match.play_games()
-elif RUNS[RUN] == "Match after training nets":
-    print("Mode: Match. Two players play against each other after training nets on the same buffer.")
-    game = HexGame()
-    pb = ReplayBuffer()
-    exp_net = Dense(hidden_layers=[(100,relu)],optimizer=SGD)
-    chal_net = Dense()
-    player1 = NetBotFromTraining("Experienced",exp_net)
-    player2 = NetBotFromTraining("Challenger",chal_net)
-
+    if len(NETS_MATCH)!=2:
+        raise ValueError("There must be two nets to play a match")
+    player1 = NetBotFromLoading(NETS_MATCH[0])
+    player2 = NetBotFromLoading(NETS_MATCH[1])
     match = Match(game, player1, player2)
     match.play_games()
 elif RUNS[RUN] == "Match vs random":
@@ -66,46 +56,21 @@ elif RUNS[RUN] == "Tournament - different net structures using replay buffer":
     player2 = NetBotFromTraining("Adam sig", net2, replay_buffer)
     player3 = NetBotFromTraining("SGD relu", net3, replay_buffer)
     player4 = NetBotFromTraining("SGD sig", net4, replay_buffer)
-    player5 = RandomPlayer()
 
-    players = [player1, player2, player3, player4, player5]
+    players = [player1, player2, player3, player4]
 
-    tournament = Tournament(game,players)
-    wins = tournament.play_tournament()
-elif RUNS[RUN] == "Tournament - different training amounts while training": 
-    print("Mode: Training tournament. A neural net is trained for a number of games. Models from different phases of the training play against each other.")
-    game = HexGame()
-    net = Dense()
-    replay_buffer = ReplayBuffer(3000,f"{BOARD_SIZE}x{BOARD_SIZE}/tt.json", clean=True)
-    players = []
-    gt = NetTrainer(net=net,replay_buffer=replay_buffer, train_net_on_init=False)
-    gt.train_games()
-    for i in range(1, gt.cached_nets+1):
-        filename_net = f"After_{i*(gt.training_iterations//gt.cached_nets)}"
-        new_net = LoadedNet(filename=filename_net)
-        players.append(NetBotFromLoading(filename=filename_net, name=f"trained {i*(gt.training_iterations//CACHED_NETS)}"))
     tournament = Tournament(game,players)
     wins = tournament.play_tournament()
 elif RUNS[RUN] == "Tournament - different training amounts from loading ": 
     print("Mode: Trained tournament. Already trained nets play against each other.")
     game = HexGame()
-    
-    player1 = NetBotFromLoading("Experienced")
-    player2 = NetBotFromLoading("Challenger")
-    player3 = NetBotFromLoading("After_40")
-    player4 = NetBotFromLoading("After_120")
-    player5 = NetBotFromLoading("After_200")
-    player6 = NetBotFromLoading("New")
-    player7 = RandomPlayer()
-
-    players = [player1, player2, player3, player4, player5, player6, player7]
-
+    players = [NetBotFromLoading(name) for name in NETS_TOURNAMENT]
     tournament = Tournament(game,players)
     wins = tournament.play_tournament()
 elif RUNS[RUN] == "Train net on buffer and save it": 
     print("Mode: Train net on buffer and save it")
     trainer = NetTrainer(train_net_on_init=True)
-    trainer.net.save("New")
+    trainer.net.save("Saved_net")
 else: 
     print("Custom - nothing")
     
