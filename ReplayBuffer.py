@@ -4,13 +4,12 @@ from Settings import BUFFER_FILENAME, BUFFER_SIZE, ADD_ORIENTATION
 
 class ReplayBuffer:
     
-    def __init__(self, max_size=BUFFER_SIZE, filename=BUFFER_FILENAME, add_orientation=ADD_ORIENTATION, clean=False):
+    def __init__(self, max_size=BUFFER_SIZE, filename=BUFFER_FILENAME, clean=False):
         self.filename = "Buffers/" + filename
         self.max_size = max_size
         self.inputs = []
         self.targets = []
         self.saved_index = 0
-        self.add_orientation = add_orientation
         if clean:
             self.clear()
         else:
@@ -37,39 +36,11 @@ class ReplayBuffer:
         self.targets = []
         self.save_data()
 
-    def get_unsaved_inputs(self):
-        inputs = []
-        for inp in self.inputs[self.saved_index:]:
-            inputs.append(np.array(inp))
-            if self.add_orientation:
-                inp_orientation = [inp[0]] + list(inp)[len(inp):0:-1]
-                inputs.append(np.array(inp_orientation))
-        return np.array(inputs)
-
-    def get_unsaved_targets(self):
-        targets = []
-        for target in self.targets[self.saved_index:]:
-            targets.append(np.array(target))
-            if self.add_orientation:
-                targets.append(np.array(list(target)[::-1]))
-        return np.array(targets)
-
     def get_all_inputs(self):
-        inputs = []
-        for inp in self.inputs:
-            inputs.append(np.array(inp))
-            if self.add_orientation:
-                inp_orientation = [inp[0]] + list(inp)[len(inp):0:-1]
-                inputs.append(np.array(inp_orientation))
-        return np.array(inputs)
+        return self.inputs
 
     def get_all_targets(self):
-        targets = []
-        for target in self.targets:
-            targets.append(np.array(target))
-            if self.add_orientation:
-                targets.append(np.array(list(target)[::-1]))
-        return np.array(targets)
+        return self.targets
 
     def add_data(self, input, target):
         self.inputs.append(input)

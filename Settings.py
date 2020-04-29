@@ -13,10 +13,10 @@ RUNS = {0:"Custom",
         7:"Tournament - different training amounts from loading ",
         8:"Train net on buffer and save it"}
 
-RUN = 8
+RUN = 1
 
 # Game
-BOARD_SIZE = 6
+BOARD_SIZE = 3
 
 # Simulation
 ROLLOUT_ITERATIONS = 25
@@ -24,8 +24,11 @@ STARTING_PLAYER_ACTUAL = 3
 
 # Training
 TRAINING_ITERATIONS = 100
-TRAIN_WITH_RANDOM_SAMPLES = False
-SAMPLES_WHILE_TRAINING = 100
+
+SAMPLES_WHILE_TRAINING = 50
+TRAIN_WITH_RANDOM_SAMPLES = True
+ADD_ORIENTATION = False
+
 EPOCHS_WHILE_TRAINING = 100
 EPOCHS_INIT = 300
 LOAD_NET = False
@@ -37,8 +40,8 @@ PLAYING_ITERATIONS = 10
 
 # Replay buffer
 BUFFER_FILENAME = f"{BOARD_SIZE}x{BOARD_SIZE}/experienced.json"
-BUFFER_SIZE = 100
-ADD_ORIENTATION = True
+BUFFER_SIZE = 20
+
 
 # Tree
 EPSILON = 1

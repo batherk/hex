@@ -14,7 +14,7 @@ class NetTrainer:
     A simulator class that uses UCT to learn and play games.
     """
 
-    def __init__(self, rollout_iterations=ROLLOUT_ITERATIONS, training_iterations=TRAINING_ITERATIONS,playing_iterations=PLAYING_ITERATIONS, starting_player=STARTING_PLAYER_ACTUAL,verbose=VERBOSE, board_size=BOARD_SIZE, net=None, tree=None, replay_buffer=None, train_net_on_init=TRAIN_NET_ON_INIT,load_net=LOAD_NET, cached_nets=CACHED_NETS, train_with_random_samples=TRAIN_WITH_RANDOM_SAMPLES):
+    def __init__(self, rollout_iterations=ROLLOUT_ITERATIONS, training_iterations=TRAINING_ITERATIONS,playing_iterations=PLAYING_ITERATIONS, starting_player=STARTING_PLAYER_ACTUAL,verbose=VERBOSE, board_size=BOARD_SIZE, net=None, tree=None, replay_buffer=None, train_net_on_init=TRAIN_NET_ON_INIT,load_net=LOAD_NET, cached_nets=CACHED_NETS, train_with_random_samples=TRAIN_WITH_RANDOM_SAMPLES, add_orientation=ADD_ORIENTATION):
         """
         Creates a simulator object. 
         If USE_UI is True then the user can fill in the needed values.
@@ -27,6 +27,7 @@ class NetTrainer:
         self.cached_nets = cached_nets
         self.starting_player_actual = starting_player
         self.train_with_random_samples = train_with_random_samples
+        self.add_orientation = add_orientation
 
         self.verbose = verbose
 
@@ -44,7 +45,7 @@ class NetTrainer:
         else:
             self.net = Dense()
         if train_net_on_init and not self.replay_buffer.is_empty():
-            self.net.update(self.replay_buffer.get_all_inputs(), self.replay_buffer.get_all_targets(),EPOCHS_INIT)
+            self.train_net(EPOCHS_INIT)
 
         
         if tree:
@@ -128,21 +129,8 @@ class NetTrainer:
                 game.board.show_graph(pause=0.00001)
         
             self.tree.clean()
-        all_inputs = self.replay_buffer.get_all_inputs()
-        all_targets = self.replay_buffer.get_all_targets()
-
-        if self.train_with_random_samples:
-            indexes_random_samples = [random.randint(0,len(all_inputs)-1) for i in range(SAMPLES_WHILE_TRAINING)]
-            inputs = []
-            targets = []
-            
-            for index in indexes_random_samples:
-                inputs.append(all_inputs[index])
-                targets.append(all_targets[index])
-            self.net.update(np.array(inputs), np.array(targets), EPOCHS_WHILE_TRAINING)
-        else: 
-            self.net.update(np.array(all_inputs), np.array(all_targets), EPOCHS_WHILE_TRAINING)
-
+        
+        self.train_net(EPOCHS_WHILE_TRAINING)
         self.replay_buffer.save_data()
                
     def train_games(self):
@@ -210,3 +198,23 @@ class NetTrainer:
         for i in range(self.playing_iterations):
             game = self.create_game()
             self.test_game(game)
+
+    def train_net(self,epochs):
+        all_inputs = self.replay_buffer.get_all_inputs()
+        all_targets = self.replay_buffer.get_all_targets()
+
+        if self.train_with_random_samples:
+            indexes_random_samples = random.sample(range(len(all_inputs)),min(len(all_inputs),SAMPLES_WHILE_TRAINING))
+            inputs = []
+            targets = []
+            
+            for index in indexes_random_samples:
+                inputs.append(all_inputs[index])
+                targets.append(all_targets[index])
+        else:
+            inputs = all_inputs
+            targets = all_targets
+
+        game = self.create_game()
+        input_tensors, target_tensors = game.convert_to_tensors(inputs,targets,self.add_orientation)
+        self.net.update(input_tensors, target_tensors, epochs)

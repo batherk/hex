@@ -1,8 +1,11 @@
+import random
+import numpy as np
+
 from HexGrid import Diamond
 from AbstractGame import AbstractGame
 from copy import deepcopy
 from Settings import BOARD_SIZE
-import random
+
 
 class HexGame(AbstractGame):
 
@@ -101,3 +104,23 @@ class HexGame(AbstractGame):
         self.board.set_state(state[1:])
         for pos in self.board.get_filled_positions():
             self.add_pos_to_visited_list(pos, self.board.get_value(pos))
+
+    def convert_to_tensors(self,states,probabilities,add_orientation=False):
+        state_tensors = []
+        probability_tensors = []
+        if len(states)!=len(probabilities):
+            raise ValueError("States and probabilities must be of equal size")
+        for i in range(len(states)):
+            state = states[i]
+            probability = probabilities[i]
+            state_tensors.append(np.array(state))
+            probability_tensors.append(np.array(probability))
+            if add_orientation:
+                state_orientation = [state[0]] + list(state)[len(state):0:-1]
+                probability_orientation = list(probability)[::-1]
+
+                state_tensors.append(np.array(state_orientation))
+                probability_tensors.append(np.array(probability_orientation))
+        return np.array(state_tensors), np.array(probability_tensors)
+
+    

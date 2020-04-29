@@ -12,8 +12,8 @@ class AbstractActorNeuralNet(ABC):
         self.board_size = board_size
         self.model = None        
 
-    def update(self, states, target_possibilities, epochs=EPOCHS_INIT):
-        return self.model.fit(states,target_possibilities, epochs=epochs)
+    def update(self, input_tensors, target_tensors, epochs=EPOCHS_INIT):
+        return self.model.fit(input_tensors,target_tensors, epochs=epochs)
 
     def get_propabilities(self, state):
         return tuple(self.model(np.array([np.array(state)]))[0])
