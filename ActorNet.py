@@ -10,13 +10,20 @@ class AbstractActorNeuralNet(ABC):
 
     def __init__(self, board_size=BOARD_SIZE):
         self.board_size = board_size
-        self.model = None        
+        self.model = None
+        self.cast = False        
 
     def update(self, input_tensors, target_tensors, epochs=EPOCHS_INIT):
         return self.model.fit(input_tensors,target_tensors, epochs=epochs)
 
     def get_propabilities(self, state):
-        return tuple(self.model(np.array([np.array(state)]))[0])
+        if not self.cast:
+            try: 
+                return tuple(self.model(np.array([np.array(state)]))[0])
+            except ValueError:
+                self.cast = True
+        return tuple(self.model(np.array([tf.cast(np.array(state),tf.int64)]))[0])
+
 
     def save(self,filename):
         self.model.save(f"Models\\{self.board_size}x{self.board_size}\\" + filename)
