@@ -89,16 +89,9 @@ elif RUNS[RUN] == "Tournament - different training amounts while training":
 elif RUNS[RUN] == "Tournament - different training amounts from loading ": 
     print("Mode: Trained tournament. Already trained nets play against each other.")
     game = HexGame()
-    
-    player1 = NetBotFromLoading("Experienced")
-    player2 = NetBotFromLoading("Challenger")
-    player3 = NetBotFromLoading("After_40")
-    player4 = NetBotFromLoading("After_120")
-    player5 = NetBotFromLoading("After_200")
-    player6 = NetBotFromLoading("New")
-    player7 = RandomPlayer()
 
-    players = [player1, player2, player3, player4, player5, player6, player7]
+    players = [NetBotFromLoading(name) for name in NET_BOTS]
+    players.append(RandomPlayer())
 
     tournament = Tournament(game,players)
     wins = tournament.play_tournament()
